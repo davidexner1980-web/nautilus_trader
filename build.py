@@ -143,12 +143,21 @@ def _set_feature_flags() -> list[str]:
     return flags
 
 
+def _is_valid_toolchain(toolchain: str) -> bool:
+    """
+    Return whether the given Rust toolchain specifier is valid.
+    """
+    return (
+        toolchain in ("stable", "nightly") or re.fullmatch(r"\d+\.\d+\.\d+", toolchain) is not None
+    )
+
+
 def _build_rust_libs() -> None:
     print("Compiling Rust libraries...")
 
     try:
         # Build the Rust libraries using Cargo
-        if RUSTUP_TOOLCHAIN not in ("stable", "nightly"):
+        if not _is_valid_toolchain(RUSTUP_TOOLCHAIN):
             raise ValueError(f"Invalid `RUSTUP_TOOLCHAIN` '{RUSTUP_TOOLCHAIN}'")
 
         needed_crates = [
