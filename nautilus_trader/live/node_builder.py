@@ -52,9 +52,7 @@ class TradingNodeBuilder:
     clock : LiveClock
         The clock for building clients.
     logger : Logger
-        The logger for building clients.
-    log : Logger
-        The trading nodes logger.
+        The logger for building clients and the trading node.
 
     """
 
