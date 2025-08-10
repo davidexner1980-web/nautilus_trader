@@ -14,7 +14,6 @@
 # -------------------------------------------------------------------------------------------------
 
 import asyncio
-import random
 from typing import Any
 from unittest.mock import AsyncMock
 from unittest.mock import MagicMock
@@ -57,12 +56,17 @@ def test_retry_backoff(
     delay_max_ms: int,
     jitter: bool,
     expected_delay: int,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """
     Test the exponential backoff and jitter calculation.
     """
     # Arrange
-    random.seed(1)
+    if jitter:
+        monkeypatch.setattr(
+            "nautilus_trader.live.retry.randint",
+            lambda _min, _max: expected_delay,
+        )
 
     # Act
     delay = get_exponential_backoff(
